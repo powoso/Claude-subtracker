@@ -3,43 +3,98 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SubTracker — Subscription Tracker &amp; Optimizer</title>
+  <title>SubTracker - Subscription Tracker &amp; Optimizer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0f1117;
-      --surface: #1a1d27;
-      --surface2: #242836;
-      --border: #2e3346;
-      --text: #e4e6f0;
-      --text-dim: #8b8fa3;
-      --accent: #6c5ce7;
-      --accent-light: #a29bfe;
-      --green: #00b894;
-      --green-bg: rgba(0,184,148,0.12);
-      --red: #ff6b6b;
-      --red-bg: rgba(255,107,107,0.12);
-      --orange: #fdcb6e;
-      --orange-bg: rgba(253,203,110,0.12);
-      --blue: #74b9ff;
-      --blue-bg: rgba(116,185,255,0.12);
-      --radius: 12px;
+      --bg: #060611;
+      --bg-gradient: linear-gradient(135deg, #060611 0%, #0c0c24 50%, #0a0a1a 100%);
+      --surface: rgba(20, 21, 43, 0.7);
+      --surface-solid: #14152b;
+      --surface2: rgba(30, 31, 60, 0.6);
+      --surface3: rgba(40, 42, 80, 0.4);
+      --border: rgba(100, 110, 200, 0.12);
+      --border-light: rgba(100, 110, 200, 0.06);
+      --text: #eeeef6;
+      --text-secondary: #a0a3c4;
+      --text-dim: #6b6e8e;
+      --accent: #7c6aef;
+      --accent-hover: #6a56e0;
+      --accent-glow: rgba(124, 106, 239, 0.25);
+      --accent-light: #b4a8fd;
+      --green: #34d399;
+      --green-bg: rgba(52, 211, 153, 0.1);
+      --green-border: rgba(52, 211, 153, 0.2);
+      --red: #f87171;
+      --red-bg: rgba(248, 113, 113, 0.1);
+      --red-border: rgba(248, 113, 113, 0.2);
+      --amber: #fbbf24;
+      --amber-bg: rgba(251, 191, 36, 0.1);
+      --amber-border: rgba(251, 191, 36, 0.2);
+      --blue: #60a5fa;
+      --blue-bg: rgba(96, 165, 250, 0.1);
+      --blue-border: rgba(96, 165, 250, 0.2);
+      --pink: #f472b6;
+      --cyan: #22d3ee;
+      --radius: 16px;
+      --radius-md: 12px;
       --radius-sm: 8px;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.15);
+      --shadow-md: 0 4px 24px rgba(0,0,0,0.2);
+      --shadow-lg: 0 8px 40px rgba(0,0,0,0.3);
+      --shadow-glow: 0 0 40px var(--accent-glow);
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: var(--bg);
+      background-image: var(--bg-gradient);
+      background-attachment: fixed;
       color: var(--text);
       line-height: 1.6;
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
+    /* Background ambient glow */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -30%;
+      left: -10%;
+      width: 60%;
+      height: 60%;
+      background: radial-gradient(circle, rgba(124, 106, 239, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: -20%;
+      right: -10%;
+      width: 50%;
+      height: 50%;
+      background: radial-gradient(circle, rgba(52, 211, 153, 0.04) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Header ─────────────────────────────────────── */
     .app-header {
-      background: var(--surface);
+      background: rgba(10, 10, 30, 0.8);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       border-bottom: 1px solid var(--border);
-      padding: 16px 32px;
+      padding: 0 32px;
+      height: 64px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -48,136 +103,270 @@
       z-index: 100;
     }
 
-    .app-header h1 {
-      font-size: 1.4rem;
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--accent), #9b7aff);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px var(--accent-glow);
+    }
+
+    .logo-icon svg { width: 20px; height: 20px; }
+
+    .header-brand {
+      font-size: 1.25rem;
       font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, var(--text) 0%, var(--accent-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header-right { display: flex; align-items: center; gap: 12px; }
+
+    /* ── Buttons ─────────────────────────────────────── */
+    .btn {
+      padding: 9px 18px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface2);
+      color: var(--text-secondary);
+      backdrop-filter: blur(8px);
+      white-space: nowrap;
+    }
+
+    .btn:hover { border-color: rgba(124,106,239,0.3); color: var(--text); background: var(--surface3); }
+    .btn:active { transform: scale(0.97); }
+    .btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #9b7aff);
+      color: white;
+      border: none;
+      font-weight: 600;
+      box-shadow: 0 4px 16px var(--accent-glow);
+    }
+
+    .btn-primary:hover { background: linear-gradient(135deg, var(--accent-hover), #8a6ff0); box-shadow: 0 6px 24px var(--accent-glow); transform: translateY(-1px); }
+    .btn-primary:active { transform: translateY(0) scale(0.97); }
+
+    .btn-danger { color: var(--red); }
+    .btn-danger:hover { background: var(--red-bg); border-color: var(--red-border); }
+    .btn-sm { padding: 6px 12px; font-size: 0.8rem; }
+    .btn-icon { padding: 8px; min-width: 34px; justify-content: center; border-radius: 8px; }
+    .btn-ghost { background: transparent; border: none; }
+    .btn-ghost:hover { background: var(--surface2); }
+
+    /* ── Layout ──────────────────────────────────────── */
+    .container {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 28px 32px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Navigation ──────────────────────────────────── */
+    .nav-tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--surface);
+      backdrop-filter: blur(16px);
+      border-radius: var(--radius);
+      padding: 5px;
+      margin-bottom: 28px;
+      border: 1px solid var(--border);
+    }
+
+    .nav-tab {
+      padding: 10px 22px;
+      border: none;
+      background: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      border-radius: var(--radius-md);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: all var(--transition);
+      flex: 1;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      position: relative;
+    }
+
+    .nav-tab svg { width: 16px; height: 16px; opacity: 0.6; }
+    .nav-tab:hover { color: var(--text-secondary); background: var(--surface2); }
+    .nav-tab:hover svg { opacity: 0.8; }
+
+    .nav-tab.active {
+      color: white;
+      background: linear-gradient(135deg, var(--accent), #9b7aff);
+      box-shadow: 0 4px 16px var(--accent-glow);
+      font-weight: 600;
+    }
+
+    .nav-tab.active svg { opacity: 1; }
+
+    /* ── Stat Cards ──────────────────────────────────── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      position: relative;
+      overflow: hidden;
+      transition: all var(--transition);
+    }
+
+    .stat-card:hover { border-color: rgba(124,106,239,0.2); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      border-radius: 3px 3px 0 0;
+    }
+
+    .stat-card .stat-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .stat-card .stat-icon svg { width: 20px; height: 20px; }
+
+    .stat-card .stat-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+    }
+
+    .stat-card .stat-value {
+      font-size: 1.9rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+
+    .stat-card .stat-sub {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      margin-top: 4px;
+      font-weight: 400;
+    }
+
+    .stat-card.accent::before { background: linear-gradient(90deg, var(--accent), #9b7aff); }
+    .stat-card.accent .stat-icon { background: rgba(124,106,239,0.12); color: var(--accent-light); }
+    .stat-card.accent .stat-value { color: var(--accent-light); }
+
+    .stat-card.blue::before { background: linear-gradient(90deg, var(--blue), var(--cyan)); }
+    .stat-card.blue .stat-icon { background: var(--blue-bg); color: var(--blue); }
+    .stat-card.blue .stat-value { color: var(--blue); }
+
+    .stat-card.green::before { background: linear-gradient(90deg, var(--green), #6ee7b7); }
+    .stat-card.green .stat-icon { background: var(--green-bg); color: var(--green); }
+    .stat-card.green .stat-value { color: var(--green); }
+
+    .stat-card.amber::before { background: linear-gradient(90deg, var(--amber), #fcd34d); }
+    .stat-card.amber .stat-icon { background: var(--amber-bg); color: var(--amber); }
+    .stat-card.amber .stat-value { color: var(--amber); }
+
+    .stat-card.red::before { background: linear-gradient(90deg, var(--red), var(--pink)); }
+    .stat-card.red .stat-icon { background: var(--red-bg); color: var(--red); }
+    .stat-card.red .stat-value { color: var(--red); }
+
+    /* ── Cards & Panels ─────────────────────────────── */
+    .panel {
+      background: var(--surface);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: all var(--transition);
+    }
+
+    .panel:hover { border-color: rgba(100,110,200,0.18); }
+
+    .panel-header {
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface2);
+    }
+
+    .panel-header h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
-    .app-header h1 .logo {
-      width: 32px;
-      height: 32px;
-      background: var(--accent);
-      border-radius: 8px;
+    .panel-header h3 svg { width: 18px; height: 18px; color: var(--accent-light); }
+    .panel-body { padding: 20px 24px; }
+
+    /* ── Section Headers ─────────────────────────────── */
+    .section-header {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      font-size: 18px;
+      margin-bottom: 18px;
     }
 
-    .header-actions {
-      display: flex;
-      gap: 12px;
-    }
-
-    .container {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 24px;
-    }
-
-    /* Navigation Tabs */
-    .nav-tabs {
-      display: flex;
-      gap: 4px;
-      background: var(--surface);
-      border-radius: var(--radius);
-      padding: 4px;
-      margin-bottom: 24px;
-      border: 1px solid var(--border);
-    }
-
-    .nav-tab {
-      padding: 10px 20px;
-      border: none;
-      background: none;
-      color: var(--text-dim);
-      cursor: pointer;
-      border-radius: var(--radius-sm);
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: all 0.2s;
-      flex: 1;
-      text-align: center;
-    }
-
-    .nav-tab:hover { color: var(--text); background: var(--surface2); }
-    .nav-tab.active { color: white; background: var(--accent); }
-
-    /* Stat Cards */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .stat-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px;
-    }
-
-    .stat-card .label {
-      font-size: 0.8rem;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 4px;
-    }
-
-    .stat-card .value {
-      font-size: 1.8rem;
+    .section-header h2 {
+      font-size: 1.15rem;
       font-weight: 700;
-    }
-
-    .stat-card .sub-value {
-      font-size: 0.85rem;
-      color: var(--text-dim);
-      margin-top: 2px;
-    }
-
-    .stat-card.green .value { color: var(--green); }
-    .stat-card.red .value { color: var(--red); }
-    .stat-card.orange .value { color: var(--orange); }
-    .stat-card.blue .value { color: var(--blue); }
-    .stat-card.accent .value { color: var(--accent-light); }
-
-    /* Buttons */
-    .btn {
-      padding: 10px 20px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: all 0.2s;
-      display: inline-flex;
+      letter-spacing: -0.01em;
+      display: flex;
       align-items: center;
-      gap: 6px;
-      background: var(--surface2);
-      color: var(--text);
+      gap: 10px;
     }
 
-    .btn:hover { border-color: var(--accent); }
-    .btn-primary { background: var(--accent); color: white; border-color: var(--accent); }
-    .btn-primary:hover { background: #5b4bd6; }
-    .btn-danger { color: var(--red); }
-    .btn-danger:hover { background: var(--red-bg); border-color: var(--red); }
-    .btn-sm { padding: 6px 12px; font-size: 0.8rem; }
-    .btn-icon { padding: 8px; min-width: 36px; justify-content: center; }
+    .section-header h2 svg { width: 20px; height: 20px; color: var(--accent-light); }
 
-    /* Tables */
-    .table-wrapper {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-
+    /* ── Tables ──────────────────────────────────────── */
     table {
       width: 100%;
       border-collapse: collapse;
@@ -185,354 +374,631 @@
 
     th {
       text-align: left;
-      padding: 12px 16px;
-      font-size: 0.75rem;
+      padding: 13px 18px;
+      font-size: 0.7rem;
+      font-weight: 600;
       color: var(--text-dim);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.07em;
       border-bottom: 1px solid var(--border);
       background: var(--surface2);
     }
 
     td {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.9rem;
+      padding: 15px 18px;
+      border-bottom: 1px solid var(--border-light);
+      font-size: 0.88rem;
+      color: var(--text-secondary);
     }
 
     tr:last-child td { border-bottom: none; }
-    tr:hover td { background: rgba(108, 92, 231, 0.04); }
 
-    .badge {
-      display: inline-block;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 0.75rem;
+    tr {
+      transition: background var(--transition);
+    }
+
+    tr:hover td { background: rgba(124, 106, 239, 0.03); }
+
+    td strong {
+      color: var(--text);
       font-weight: 600;
     }
 
-    .badge-green { background: var(--green-bg); color: var(--green); }
-    .badge-red { background: var(--red-bg); color: var(--red); }
-    .badge-orange { background: var(--orange-bg); color: var(--orange); }
-    .badge-blue { background: var(--blue-bg); color: var(--blue); }
-    .badge-accent { background: rgba(108,92,231,0.15); color: var(--accent-light); }
+    /* ── Badges ──────────────────────────────────────── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
 
-    /* Usage Stars */
-    .usage-stars {
+    .badge svg { width: 12px; height: 12px; }
+
+    .badge-green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+    .badge-red { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+    .badge-amber { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+    .badge-blue { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-border); }
+    .badge-accent { background: rgba(124,106,239,0.1); color: var(--accent-light); border: 1px solid rgba(124,106,239,0.2); }
+
+    /* ── Category Bars ───────────────────────────────── */
+    .category-item {
       display: flex;
-      gap: 2px;
+      align-items: center;
+      gap: 16px;
+      padding: 10px 0;
     }
 
-    .usage-stars .star {
-      width: 16px;
-      height: 16px;
-      color: var(--border);
+    .category-item + .category-item { border-top: 1px solid var(--border-light); }
+
+    .cat-color {
+      width: 4px;
+      height: 36px;
+      border-radius: 4px;
+      flex-shrink: 0;
     }
 
-    .usage-stars .star.filled { color: var(--orange); }
+    .cat-info { flex: 1; }
+    .cat-name { font-size: 0.88rem; font-weight: 500; color: var(--text); }
+    .cat-count { font-size: 0.75rem; color: var(--text-dim); }
+    .cat-bar-track { height: 6px; background: var(--surface3); border-radius: 3px; margin-top: 6px; overflow: hidden; }
+    .cat-bar-fill { height: 100%; border-radius: 3px; transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
+    .cat-cost { font-size: 0.9rem; font-weight: 600; color: var(--text); text-align: right; white-space: nowrap; }
+    .cat-annual { font-size: 0.72rem; color: var(--text-dim); text-align: right; }
 
-    /* Category Bars */
-    .category-bar-wrapper {
-      margin-bottom: 12px;
+    /* ── Donut Chart ─────────────────────────────────── */
+    .donut-container {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      padding: 20px 0;
     }
 
-    .category-bar-header {
+    .donut-svg { width: 160px; height: 160px; flex-shrink: 0; transform: rotate(-90deg); }
+
+    .donut-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    .legend-item span:last-child { margin-left: auto; font-weight: 600; color: var(--text); }
+
+    /* ── Alerts / Renewals ───────────────────────────── */
+    .renewal-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-light);
+      transition: background var(--transition);
+    }
+
+    .renewal-item:last-child { border-bottom: none; }
+    .renewal-item:hover { background: rgba(124,106,239,0.03); }
+
+    .renewal-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .renewal-icon svg { width: 20px; height: 20px; }
+    .renewal-icon.critical { background: var(--red-bg); color: var(--red); }
+    .renewal-icon.warning { background: var(--amber-bg); color: var(--amber); }
+    .renewal-icon.normal { background: var(--blue-bg); color: var(--blue); }
+
+    .renewal-details { flex: 1; }
+    .renewal-name { font-weight: 600; font-size: 0.92rem; color: var(--text); }
+    .renewal-meta { font-size: 0.78rem; color: var(--text-dim); margin-top: 2px; }
+
+    .renewal-countdown {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .renewal-days {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .renewal-days.critical { color: var(--red); }
+    .renewal-days.warning { color: var(--amber); }
+    .renewal-days.normal { color: var(--blue); }
+
+    .renewal-label {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Alternatives ────────────────────────────────── */
+    .alt-group {
+      background: var(--surface);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 18px;
+      overflow: hidden;
+      transition: all var(--transition);
+    }
+
+    .alt-group:hover { border-color: rgba(100,110,200,0.2); }
+
+    .alt-group-header {
+      padding: 18px 22px;
       display: flex;
       justify-content: space-between;
-      margin-bottom: 4px;
-      font-size: 0.85rem;
-    }
-
-    .category-bar {
-      height: 8px;
+      align-items: center;
       background: var(--surface2);
-      border-radius: 4px;
-      overflow: hidden;
+      border-bottom: 1px solid var(--border);
     }
 
-    .category-bar-fill {
-      height: 100%;
-      border-radius: 4px;
-      transition: width 0.6s ease;
+    .alt-group-header .name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    /* Modal */
+    .alt-group-header .cost { color: var(--text-dim); font-size: 0.85rem; font-weight: 500; }
+
+    .alt-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 22px;
+      border-bottom: 1px solid var(--border-light);
+      transition: background var(--transition);
+    }
+
+    .alt-item:last-child { border-bottom: none; }
+    .alt-item:hover { background: rgba(124,106,239,0.03); }
+
+    .alt-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--green-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .alt-badge svg { width: 18px; height: 18px; color: var(--green); }
+
+    .alt-info { flex: 1; }
+    .alt-name { font-weight: 500; font-size: 0.9rem; }
+    .alt-name a { color: var(--accent-light); text-decoration: none; transition: color var(--transition); }
+    .alt-name a:hover { color: var(--accent); text-decoration: underline; }
+    .alt-desc { font-size: 0.78rem; color: var(--text-dim); margin-top: 3px; }
+    .alt-savings { text-align: right; }
+    .alt-price { font-size: 1rem; font-weight: 700; color: var(--green); }
+    .alt-save-label { font-size: 0.72rem; color: var(--text-dim); }
+
+    /* ── Modal ────────────────────────────────────────── */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.6);
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(6px);
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 200;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.2s;
+      transition: opacity 0.3s ease;
     }
 
     .modal-overlay.active { opacity: 1; pointer-events: auto; }
 
     .modal {
-      background: var(--surface);
+      background: var(--surface-solid);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 28px;
+      padding: 0;
       width: 90%;
-      max-width: 520px;
+      max-width: 560px;
       max-height: 90vh;
       overflow-y: auto;
-      transform: translateY(20px);
-      transition: transform 0.2s;
+      transform: translateY(24px) scale(0.96);
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: var(--shadow-lg);
     }
 
-    .modal-overlay.active .modal { transform: translateY(0); }
+    .modal-overlay.active .modal { transform: translateY(0) scale(1); }
 
-    .modal h2 {
+    .modal-header {
+      padding: 22px 28px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-header h2 {
       font-size: 1.2rem;
-      margin-bottom: 20px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
     }
 
-    .form-group {
-      margin-bottom: 16px;
-    }
+    .modal-body { padding: 20px 28px 28px; }
+
+    .form-group { margin-bottom: 18px; }
 
     .form-group label {
       display: block;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
+      font-weight: 600;
       color: var(--text-dim);
-      margin-bottom: 6px;
+      margin-bottom: 7px;
       text-transform: uppercase;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.05em;
     }
 
     .form-group input,
     .form-group select,
     .form-group textarea {
       width: 100%;
-      padding: 10px 14px;
-      background: var(--bg);
+      padding: 11px 16px;
+      background: rgba(6, 6, 17, 0.6);
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
       color: var(--text);
-      font-size: 0.9rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
       outline: none;
-      transition: border-color 0.2s;
+      transition: all var(--transition);
     }
 
     .form-group input:focus,
     .form-group select:focus,
     .form-group textarea:focus {
       border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
     }
 
-    .form-group textarea { resize: vertical; min-height: 60px; }
+    .form-group input::placeholder { color: var(--text-dim); }
+    .form-group textarea { resize: vertical; min-height: 64px; }
 
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      gap: 14px;
     }
 
     .form-actions {
       display: flex;
       gap: 10px;
       justify-content: flex-end;
-      margin-top: 24px;
+      margin-top: 26px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
     }
 
-    /* Alerts Panel */
-    .alert-item {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .alert-item:last-child { border-bottom: none; }
-
-    .alert-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      flex-shrink: 0;
-    }
-
-    .alert-icon.critical { background: var(--red-bg); }
-    .alert-icon.warning { background: var(--orange-bg); }
-    .alert-icon.normal { background: var(--blue-bg); }
-
-    .alert-details { flex: 1; }
-    .alert-details .alert-name { font-weight: 600; font-size: 0.95rem; }
-    .alert-details .alert-meta { font-size: 0.8rem; color: var(--text-dim); }
-    .alert-days { font-weight: 700; font-size: 0.95rem; text-align: right; white-space: nowrap; }
-
-    /* Alternatives */
-    .alt-group {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      margin-bottom: 16px;
-      overflow: hidden;
-    }
-
-    .alt-group-header {
-      padding: 16px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--surface2);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .alt-group-header .name { font-weight: 600; }
-    .alt-group-header .cost { color: var(--text-dim); font-size: 0.9rem; }
-
-    .alt-item {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 14px 20px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .alt-item:last-child { border-bottom: none; }
-
-    .alt-info { flex: 1; }
-    .alt-info .alt-name { font-weight: 500; }
-    .alt-info .alt-desc { font-size: 0.8rem; color: var(--text-dim); margin-top: 2px; }
-    .alt-savings { text-align: right; }
-    .alt-savings .amount { font-weight: 700; color: var(--green); }
-    .alt-savings .period { font-size: 0.75rem; color: var(--text-dim); }
-
-    /* Section headers */
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-
-    .section-header h2 {
-      font-size: 1.1rem;
-      font-weight: 600;
-    }
-
-    /* Empty state */
+    /* ── Empty State ─────────────────────────────────── */
     .empty-state {
       text-align: center;
-      padding: 60px 20px;
+      padding: 60px 24px;
       color: var(--text-dim);
     }
 
-    .empty-state .icon { font-size: 48px; margin-bottom: 16px; opacity: 0.5; }
-    .empty-state h3 { font-size: 1.1rem; color: var(--text); margin-bottom: 8px; }
+    .empty-state .empty-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 18px;
+      border-radius: 16px;
+      background: var(--surface2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-    /* Tab panels */
-    .tab-panel { display: none; }
+    .empty-state .empty-icon svg { width: 28px; height: 28px; color: var(--text-dim); }
+    .empty-state h3 { font-size: 1.05rem; color: var(--text); margin-bottom: 8px; font-weight: 600; }
+    .empty-state p { font-size: 0.88rem; max-width: 320px; margin: 0 auto; }
+
+    /* ── Tab Panels ──────────────────────────────────── */
+    .tab-panel { display: none; animation: fadeUp 0.3s ease; }
     .tab-panel.active { display: block; }
 
-    /* Responsive */
-    @media (max-width: 768px) {
-      .container { padding: 16px; }
-      .app-header { padding: 12px 16px; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); }
-      .form-row { grid-template-columns: 1fr; }
-      .nav-tabs { flex-wrap: wrap; }
-      .nav-tab { padding: 8px 12px; font-size: 0.8rem; }
-      td, th { padding: 10px 8px; font-size: 0.8rem; }
-      .hide-mobile { display: none; }
-    }
-
-    /* Scrollbar styling */
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
-
-    /* Animations */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .fade-in { animation: fadeIn 0.3s ease; }
 
-    /* Toast notifications */
+    /* ── Dashboard Grid ──────────────────────────────── */
+    .dash-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .dash-grid .panel { min-height: 200px; }
+
+    /* ── Toast ────────────────────────────────────────── */
     .toast-container {
       position: fixed;
-      top: 80px;
-      right: 24px;
+      bottom: 28px;
+      right: 28px;
       z-index: 300;
       display: flex;
-      flex-direction: column;
-      gap: 8px;
+      flex-direction: column-reverse;
+      gap: 10px;
     }
 
     .toast {
-      background: var(--surface2);
+      background: var(--surface-solid);
       border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 12px 20px;
-      font-size: 0.9rem;
-      animation: slideIn 0.3s ease;
-      min-width: 250px;
+      border-radius: var(--radius-md);
+      padding: 14px 22px;
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: toastIn 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: var(--shadow-lg);
+      min-width: 280px;
     }
 
-    .toast.success { border-left: 3px solid var(--green); }
-    .toast.error { border-left: 3px solid var(--red); }
+    .toast svg { width: 18px; height: 18px; flex-shrink: 0; }
+    .toast.success { border-color: var(--green-border); }
+    .toast.success svg { color: var(--green); }
+    .toast.error { border-color: var(--red-border); }
+    .toast.error svg { color: var(--red); }
 
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateX(20px); }
-      to { opacity: 1; transform: translateX(0); }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(16px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
+
+    /* ── Usage Stars ─────────────────────────────────── */
+    .stars {
+      display: inline-flex;
+      gap: 2px;
+    }
+
+    .stars svg {
+      width: 15px;
+      height: 15px;
+      color: var(--border);
+      transition: color var(--transition);
+    }
+
+    .stars svg.filled { color: var(--amber); }
+
+    /* ── Underused card ──────────────────────────────── */
+    .underused-card {
+      background: var(--surface);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      transition: all var(--transition);
+    }
+
+    .underused-card:hover { border-color: var(--red-border); transform: translateY(-1px); }
+
+    .underused-info { flex: 1; }
+    .underused-name { font-weight: 600; font-size: 0.95rem; color: var(--text); }
+    .underused-reason { font-size: 0.8rem; color: var(--amber); margin-top: 3px; }
+    .underused-meta { font-size: 0.78rem; color: var(--text-dim); margin-top: 2px; }
+
+    .underused-cost {
+      text-align: right;
+    }
+
+    .underused-monthly { font-size: 1.1rem; font-weight: 700; color: var(--red); }
+    .underused-annual { font-size: 0.72rem; color: var(--text-dim); }
+
+    /* ── Scrollbar ────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(100,110,200,0.2); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(100,110,200,0.3); }
+
+    /* ── Responsive ──────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .dash-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .container { padding: 16px; }
+      .app-header { padding: 0 16px; }
+      .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .stat-card { padding: 16px; }
+      .stat-card .stat-value { font-size: 1.4rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .nav-tabs { overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; }
+      .nav-tab { flex: none; padding: 10px 16px; font-size: 0.82rem; }
+      td, th { padding: 10px 12px; font-size: 0.8rem; }
+      .hide-mobile { display: none; }
+      .donut-container { flex-direction: column; text-align: center; }
+      .header-brand { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Delete confirm modal ─────────────────────────── */
+    .confirm-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 250;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .confirm-overlay.active { opacity: 1; pointer-events: auto; }
+
+    .confirm-box {
+      background: var(--surface-solid);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      transform: translateY(20px) scale(0.96);
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .confirm-overlay.active .confirm-box { transform: translateY(0) scale(1); }
+
+    .confirm-box .confirm-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: var(--red-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+
+    .confirm-box .confirm-icon svg { width: 28px; height: 28px; color: var(--red); }
+    .confirm-box h3 { font-size: 1.1rem; margin-bottom: 8px; }
+    .confirm-box p { font-size: 0.88rem; color: var(--text-dim); margin-bottom: 24px; }
+    .confirm-actions { display: flex; gap: 10px; justify-content: center; }
   </style>
 </head>
 <body>
 
+<!-- SVG Icon Defs (hidden) -->
+<svg style="display:none">
+  <defs>
+    <symbol id="icon-dollar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></symbol>
+    <symbol id="icon-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
+    <symbol id="icon-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></symbol>
+    <symbol id="icon-alert-triangle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+    <symbol id="icon-zap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+    <symbol id="icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></symbol>
+    <symbol id="icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></symbol>
+    <symbol id="icon-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></symbol>
+    <symbol id="icon-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></symbol>
+    <symbol id="icon-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+    <symbol id="icon-activity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></symbol>
+    <symbol id="icon-trending-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></symbol>
+    <symbol id="icon-star" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+    <symbol id="icon-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></symbol>
+    <symbol id="icon-bar-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></symbol>
+    <symbol id="icon-credit-card" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></symbol>
+    <symbol id="icon-package" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></symbol>
+    <symbol id="icon-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+    <symbol id="icon-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+  </defs>
+</svg>
+
 <header class="app-header">
-  <h1>
-    <span class="logo">$</span>
-    SubTracker
-  </h1>
-  <div class="header-actions">
-    <button class="btn btn-primary" onclick="openAddModal()">+ Add Subscription</button>
+  <div class="header-left">
+    <div class="logo-icon">
+      <svg><use href="#icon-credit-card"/></svg>
+    </div>
+    <span class="header-brand">SubTracker</span>
+  </div>
+  <div class="header-right">
+    <button class="btn btn-primary" onclick="openAddModal()">
+      <svg><use href="#icon-plus"/></svg>
+      Add Subscription
+    </button>
   </div>
 </header>
 
 <div class="container">
-  <!-- Navigation -->
   <div class="nav-tabs">
-    <button class="nav-tab active" data-tab="dashboard">Dashboard</button>
-    <button class="nav-tab" data-tab="subscriptions">Subscriptions</button>
-    <button class="nav-tab" data-tab="underused">Underused</button>
-    <button class="nav-tab" data-tab="alternatives">Alternatives</button>
-    <button class="nav-tab" data-tab="renewals">Renewals</button>
+    <button class="nav-tab active" data-tab="dashboard">
+      <svg><use href="#icon-home"/></svg>
+      <span>Dashboard</span>
+    </button>
+    <button class="nav-tab" data-tab="subscriptions">
+      <svg><use href="#icon-list"/></svg>
+      <span>Subscriptions</span>
+    </button>
+    <button class="nav-tab" data-tab="underused">
+      <svg><use href="#icon-alert-triangle"/></svg>
+      <span>Underused</span>
+    </button>
+    <button class="nav-tab" data-tab="alternatives">
+      <svg><use href="#icon-zap"/></svg>
+      <span>Alternatives</span>
+    </button>
+    <button class="nav-tab" data-tab="renewals">
+      <svg><use href="#icon-bell"/></svg>
+      <span>Renewals</span>
+    </button>
   </div>
 
   <!-- Dashboard Tab -->
   <div id="tab-dashboard" class="tab-panel active">
     <div class="stats-grid" id="stats-grid"></div>
-
-    <div class="section-header">
-      <h2>Spending by Category</h2>
+    <div class="dash-grid">
+      <div class="panel">
+        <div class="panel-header">
+          <h3><svg><use href="#icon-bar-chart"/></svg> Spending by Category</h3>
+        </div>
+        <div class="panel-body" id="category-breakdown"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <h3><svg><use href="#icon-activity"/></svg> Spending Distribution</h3>
+        </div>
+        <div class="panel-body" id="donut-chart"></div>
+      </div>
     </div>
-    <div class="table-wrapper" style="padding: 20px; margin-bottom: 24px;" id="category-breakdown"></div>
-
-    <div class="section-header">
-      <h2>Upcoming Renewals (7 Days)</h2>
+    <div class="panel">
+      <div class="panel-header">
+        <h3><svg><use href="#icon-bell"/></svg> Upcoming Renewals (7 Days)</h3>
+      </div>
+      <div id="dashboard-renewals"></div>
     </div>
-    <div class="table-wrapper" id="dashboard-renewals"></div>
   </div>
 
   <!-- Subscriptions Tab -->
   <div id="tab-subscriptions" class="tab-panel">
     <div class="section-header">
-      <h2>All Subscriptions</h2>
-      <div style="display:flex;gap:8px;">
+      <h2><svg><use href="#icon-package"/></svg> All Subscriptions</h2>
+      <div style="display:flex;gap:10px;">
         <select id="filter-category" class="btn" onchange="loadSubscriptions()">
           <option value="">All Categories</option>
         </select>
@@ -544,25 +1010,25 @@
         </select>
       </div>
     </div>
-    <div class="table-wrapper" id="subscriptions-table"></div>
+    <div class="panel" id="subscriptions-table"></div>
   </div>
 
   <!-- Underused Tab -->
   <div id="tab-underused" class="tab-panel">
     <div id="underused-stats" class="stats-grid" style="margin-bottom:24px;"></div>
     <div class="section-header">
-      <h2>Flagged Subscriptions</h2>
+      <h2><svg><use href="#icon-trending-down"/></svg> Flagged Subscriptions</h2>
     </div>
-    <div class="table-wrapper" id="underused-table"></div>
+    <div id="underused-list"></div>
   </div>
 
   <!-- Alternatives Tab -->
   <div id="tab-alternatives" class="tab-panel">
     <div class="section-header">
-      <h2>Cheaper Alternatives</h2>
+      <h2><svg><use href="#icon-zap"/></svg> Cheaper Alternatives</h2>
     </div>
-    <p style="color:var(--text-dim);margin-bottom:20px;font-size:0.9rem;">
-      Free and lower-cost alternatives to your current subscriptions. Switch to save money.
+    <p style="color:var(--text-dim);margin-bottom:22px;font-size:0.88rem;max-width:640px;">
+      Discover free and lower-cost alternatives to your current subscriptions. Switch to reduce your monthly spend without losing functionality.
     </p>
     <div id="alternatives-list"></div>
   </div>
@@ -570,7 +1036,7 @@
   <!-- Renewals Tab -->
   <div id="tab-renewals" class="tab-panel">
     <div class="section-header">
-      <h2>Upcoming Renewals</h2>
+      <h2><svg><use href="#icon-calendar"/></svg> Upcoming Renewals</h2>
       <select id="renewal-days" class="btn" onchange="loadRenewals()">
         <option value="7">Next 7 days</option>
         <option value="14">Next 14 days</option>
@@ -579,102 +1045,121 @@
         <option value="90">Next 90 days</option>
       </select>
     </div>
-    <div class="table-wrapper" id="renewals-list"></div>
+    <div class="panel" id="renewals-list"></div>
   </div>
 </div>
 
 <!-- Add/Edit Modal -->
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal">
-    <h2 id="modal-title">Add Subscription</h2>
-    <form id="sub-form" onsubmit="handleFormSubmit(event)">
-      <input type="hidden" id="form-id">
-      <div class="form-group">
-        <label>Subscription Name</label>
-        <input type="text" id="form-name" placeholder="e.g. Netflix, Spotify, Gym..." required>
-      </div>
-      <div class="form-row">
+    <div class="modal-header">
+      <h2 id="modal-title">Add Subscription</h2>
+      <button class="btn btn-ghost btn-icon" onclick="closeModal()"><svg><use href="#icon-x"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <form id="sub-form" onsubmit="handleFormSubmit(event)">
+        <input type="hidden" id="form-id">
         <div class="form-group">
-          <label>Category</label>
-          <select id="form-category">
-            <option value="Streaming">Streaming</option>
-            <option value="Music">Music</option>
-            <option value="Gaming">Gaming</option>
-            <option value="Fitness">Fitness</option>
-            <option value="Productivity">Productivity</option>
-            <option value="Cloud Storage">Cloud Storage</option>
-            <option value="Security">Security</option>
-            <option value="Developer Tools">Developer Tools</option>
-            <option value="Design">Design</option>
-            <option value="Communication">Communication</option>
-            <option value="News">News</option>
-            <option value="Education">Education</option>
-            <option value="Food & Delivery">Food & Delivery</option>
-            <option value="Shopping">Shopping</option>
-            <option value="Finance">Finance</option>
-            <option value="Health">Health</option>
-            <option value="Other">Other</option>
-          </select>
+          <label>Subscription Name</label>
+          <input type="text" id="form-name" placeholder="e.g. Netflix, Spotify, Gym..." required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Category</label>
+            <select id="form-category">
+              <option value="Streaming">Streaming</option>
+              <option value="Music">Music</option>
+              <option value="Gaming">Gaming</option>
+              <option value="Fitness">Fitness</option>
+              <option value="Productivity">Productivity</option>
+              <option value="Cloud Storage">Cloud Storage</option>
+              <option value="Security">Security</option>
+              <option value="Developer Tools">Developer Tools</option>
+              <option value="Design">Design</option>
+              <option value="Communication">Communication</option>
+              <option value="News">News</option>
+              <option value="Education">Education</option>
+              <option value="Food & Delivery">Food &amp; Delivery</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Finance">Finance</option>
+              <option value="Health">Health</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select id="form-status">
+              <option value="active">Active</option>
+              <option value="paused">Paused</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Cost ($)</label>
+            <input type="number" id="form-cost" step="0.01" min="0" placeholder="9.99" required>
+          </div>
+          <div class="form-group">
+            <label>Billing Cycle</label>
+            <select id="form-billing">
+              <option value="monthly">Monthly</option>
+              <option value="annual">Annual</option>
+              <option value="weekly">Weekly</option>
+              <option value="quarterly">Quarterly</option>
+              <option value="semi-annual">Semi-Annual</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Next Renewal Date</label>
+            <input type="date" id="form-renewal" required>
+          </div>
+          <div class="form-group">
+            <label>Usage Rating (1-5)</label>
+            <select id="form-usage">
+              <option value="1">1 - Never use</option>
+              <option value="2">2 - Rarely</option>
+              <option value="3" selected>3 - Sometimes</option>
+              <option value="4">4 - Often</option>
+              <option value="5">5 - Daily</option>
+            </select>
+          </div>
         </div>
         <div class="form-group">
-          <label>Status</label>
-          <select id="form-status">
-            <option value="active">Active</option>
-            <option value="paused">Paused</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
+          <label>Notes</label>
+          <textarea id="form-notes" placeholder="Any notes about this subscription..."></textarea>
         </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Cost ($)</label>
-          <input type="number" id="form-cost" step="0.01" min="0" placeholder="9.99" required>
+        <div class="form-actions">
+          <button type="button" class="btn" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="form-submit-btn">
+            <svg><use href="#icon-plus"/></svg> Add Subscription
+          </button>
         </div>
-        <div class="form-group">
-          <label>Billing Cycle</label>
-          <select id="form-billing">
-            <option value="monthly">Monthly</option>
-            <option value="annual">Annual</option>
-            <option value="weekly">Weekly</option>
-            <option value="quarterly">Quarterly</option>
-            <option value="semi-annual">Semi-Annual</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Next Renewal Date</label>
-          <input type="date" id="form-renewal" required>
-        </div>
-        <div class="form-group">
-          <label>Usage Rating (1-5)</label>
-          <select id="form-usage">
-            <option value="1">1 - Never use</option>
-            <option value="2">2 - Rarely</option>
-            <option value="3" selected>3 - Sometimes</option>
-            <option value="4">4 - Often</option>
-            <option value="5">5 - Daily</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Notes</label>
-        <textarea id="form-notes" placeholder="Any notes about this subscription..."></textarea>
-      </div>
-      <div class="form-actions">
-        <button type="button" class="btn" onclick="closeModal()">Cancel</button>
-        <button type="submit" class="btn btn-primary" id="form-submit-btn">Add Subscription</button>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </div>
 
-<!-- Toast container -->
+<!-- Delete Confirm Modal -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <div class="confirm-icon"><svg><use href="#icon-trash"/></svg></div>
+    <h3>Delete Subscription?</h3>
+    <p id="confirm-text">This action cannot be undone.</p>
+    <div class="confirm-actions">
+      <button class="btn" onclick="closeConfirm()">Cancel</button>
+      <button class="btn btn-primary" style="background:var(--red);box-shadow:0 4px 16px rgba(248,113,113,0.25);" id="confirm-delete-btn">Delete</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast-container" id="toast-container"></div>
 
 <script>
-  // ─── API Helpers ─────────────────────────────────────────────────────────
   const API = '/api';
+  const CHART_COLORS = ['#7c6aef','#34d399','#60a5fa','#fbbf24','#f87171','#f472b6','#22d3ee','#a78bfa','#6ee7b7','#fcd34d','#fb923c','#c084fc'];
 
   async function api(path, options = {}) {
     const res = await fetch(API + path, {
@@ -688,18 +1173,20 @@
     const container = document.getElementById('toast-container');
     const el = document.createElement('div');
     el.className = `toast ${type}`;
-    el.textContent = message;
+    const iconId = type === 'success' ? '#icon-check' : '#icon-x';
+    el.innerHTML = `<svg><use href="${iconId}"/></svg><span>${esc(message)}</span>`;
     container.appendChild(el);
-    setTimeout(() => el.remove(), 3000);
+    setTimeout(() => { el.style.opacity = '0'; el.style.transform = 'translateY(10px)'; setTimeout(() => el.remove(), 300); }, 3000);
   }
 
-  // ─── Tab Navigation ─────────────────────────────────────────────────────
+  // ── Tab Navigation ────────────────────────────────
   document.querySelectorAll('.nav-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
       tab.classList.add('active');
-      document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+      const panel = document.getElementById(`tab-${tab.dataset.tab}`);
+      panel.classList.add('active');
       loadTabData(tab.dataset.tab);
     });
   });
@@ -714,70 +1201,112 @@
     }
   }
 
-  // ─── Dashboard ──────────────────────────────────────────────────────────
+  // ── Dashboard ─────────────────────────────────────
   async function loadDashboard() {
-    const [summary, renewals] = await Promise.all([
+    const [summary, renewals, underused] = await Promise.all([
       api('/analytics/summary'),
       api('/analytics/renewals?days=7'),
+      api('/analytics/underused'),
     ]);
 
     document.getElementById('stats-grid').innerHTML = `
       <div class="stat-card accent">
-        <div class="label">Active Subscriptions</div>
-        <div class="value">${summary.active_count}</div>
+        <div class="stat-icon"><svg><use href="#icon-package"/></svg></div>
+        <div class="stat-label">Active Subscriptions</div>
+        <div class="stat-value">${summary.active_count}</div>
+        <div class="stat-sub">${summary.category_breakdown.length} categories</div>
       </div>
       <div class="stat-card blue">
-        <div class="label">Monthly Spend</div>
-        <div class="value">$${summary.total_monthly.toFixed(2)}</div>
-        <div class="sub-value">$${summary.total_daily.toFixed(2)}/day</div>
+        <div class="stat-icon"><svg><use href="#icon-credit-card"/></svg></div>
+        <div class="stat-label">Monthly Spend</div>
+        <div class="stat-value">$${summary.total_monthly.toFixed(2)}</div>
+        <div class="stat-sub">$${summary.total_daily.toFixed(2)} per day</div>
       </div>
       <div class="stat-card green">
-        <div class="label">Annual Spend</div>
-        <div class="value">$${summary.total_annual.toFixed(2)}</div>
+        <div class="stat-icon"><svg><use href="#icon-bar-chart"/></svg></div>
+        <div class="stat-label">Annual Spend</div>
+        <div class="stat-value">$${fmt(summary.total_annual)}</div>
+        <div class="stat-sub">Projected yearly total</div>
       </div>
-      <div class="stat-card orange">
-        <div class="label">Renewals This Week</div>
-        <div class="value">${renewals.upcoming_count}</div>
+      <div class="stat-card amber">
+        <div class="stat-icon"><svg><use href="#icon-bell"/></svg></div>
+        <div class="stat-label">Renewing Soon</div>
+        <div class="stat-value">${renewals.upcoming_count}</div>
+        <div class="stat-sub">Within 7 days</div>
       </div>
     `;
 
-    // Category breakdown
+    // Category breakdown bars
     const maxCat = Math.max(...summary.category_breakdown.map(c => c.monthly_cost), 1);
-    const colors = ['#6c5ce7','#00b894','#74b9ff','#fdcb6e','#ff6b6b','#fd79a8','#a29bfe','#55efc4'];
     document.getElementById('category-breakdown').innerHTML = summary.category_breakdown.length === 0
-      ? '<p style="color:var(--text-dim)">No active subscriptions yet.</p>'
+      ? '<p style="color:var(--text-dim);font-size:0.88rem;">No active subscriptions yet.</p>'
       : summary.category_breakdown.map((c, i) => `
-        <div class="category-bar-wrapper">
-          <div class="category-bar-header">
-            <span>${c.category} (${c.count})</span>
-            <span>$${c.monthly_cost.toFixed(2)}/mo</span>
+        <div class="category-item">
+          <div class="cat-color" style="background:${CHART_COLORS[i % CHART_COLORS.length]}"></div>
+          <div class="cat-info">
+            <div class="cat-name">${c.category}</div>
+            <div class="cat-count">${c.count} subscription${c.count > 1 ? 's' : ''}</div>
+            <div class="cat-bar-track">
+              <div class="cat-bar-fill" style="width:${(c.monthly_cost / maxCat * 100)}%;background:${CHART_COLORS[i % CHART_COLORS.length]}"></div>
+            </div>
           </div>
-          <div class="category-bar">
-            <div class="category-bar-fill" style="width:${(c.monthly_cost / maxCat * 100)}%;background:${colors[i % colors.length]}"></div>
+          <div>
+            <div class="cat-cost">$${c.monthly_cost.toFixed(2)}/mo</div>
+            <div class="cat-annual">$${c.annual_cost.toFixed(2)}/yr</div>
           </div>
         </div>
       `).join('');
 
-    // Upcoming renewals widget
+    // Donut chart
+    renderDonut(summary.category_breakdown, summary.total_monthly);
+
+    // Upcoming renewals
     document.getElementById('dashboard-renewals').innerHTML = renewals.renewals.length === 0
-      ? '<div class="empty-state"><p>No renewals in the next 7 days</p></div>'
-      : renewals.renewals.map(r => `
-        <div class="alert-item">
-          <div class="alert-icon ${r.urgency}">
-            ${r.urgency === 'critical' ? '!!' : r.urgency === 'warning' ? '!' : 'i'}
-          </div>
-          <div class="alert-details">
-            <div class="alert-name">${esc(r.name)}</div>
-            <div class="alert-meta">${r.category} &bull; $${r.monthly_cost.toFixed(2)}/mo &bull; ${r.next_renewal}</div>
-          </div>
-          <div class="alert-days" style="color: var(--${r.urgency === 'critical' ? 'red' : r.urgency === 'warning' ? 'orange' : 'blue'})">
-            ${r.days_until_renewal === 0 ? 'Today' : r.days_until_renewal === 1 ? 'Tomorrow' : `${r.days_until_renewal} days`}
-          </div>
-        </div>
-      `).join('');
+      ? `<div class="empty-state"><div class="empty-icon"><svg><use href="#icon-check"/></svg></div><h3>All clear!</h3><p>No renewals in the next 7 days.</p></div>`
+      : renewals.renewals.map(r => renderRenewalItem(r)).join('');
   }
 
-  // ─── Subscriptions List ─────────────────────────────────────────────────
+  function renderDonut(categories, total) {
+    if (categories.length === 0) {
+      document.getElementById('donut-chart').innerHTML = '<p style="color:var(--text-dim);font-size:0.88rem;">No data to display.</p>';
+      return;
+    }
+
+    const size = 160, cx = 80, cy = 80, r = 62, strokeW = 20;
+    const circumference = 2 * Math.PI * r;
+    let offset = 0;
+
+    const segments = categories.map((c, i) => {
+      const pct = total > 0 ? c.monthly_cost / total : 0;
+      const dash = pct * circumference;
+      const gap = circumference - dash;
+      const seg = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${CHART_COLORS[i % CHART_COLORS.length]}" stroke-width="${strokeW}" stroke-dasharray="${dash} ${gap}" stroke-dashoffset="${-offset}" opacity="0.85"/>`;
+      offset += dash;
+      return seg;
+    });
+
+    const legend = categories.slice(0, 8).map((c, i) => `
+      <div class="legend-item">
+        <div class="legend-dot" style="background:${CHART_COLORS[i % CHART_COLORS.length]}"></div>
+        <span>${c.category}</span>
+        <span>$${c.monthly_cost.toFixed(2)}</span>
+      </div>
+    `).join('');
+
+    document.getElementById('donut-chart').innerHTML = `
+      <div class="donut-container">
+        <svg class="donut-svg" viewBox="0 0 ${size} ${size}">
+          <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--surface3)" stroke-width="${strokeW}"/>
+          ${segments.join('')}
+          <text x="${cx}" y="${cy - 6}" text-anchor="middle" fill="var(--text)" font-size="18" font-weight="800" transform="rotate(90 ${cx} ${cy})" style="font-family:Inter,sans-serif">$${fmt(total)}</text>
+          <text x="${cx}" y="${cy + 12}" text-anchor="middle" fill="var(--text-dim)" font-size="9" font-weight="500" transform="rotate(90 ${cx} ${cy})" style="font-family:Inter,sans-serif">PER MONTH</text>
+        </svg>
+        <div class="donut-legend">${legend}</div>
+      </div>
+    `;
+  }
+
+  // ── Subscriptions ─────────────────────────────────
   async function loadSubscriptions() {
     const categoryFilter = document.getElementById('filter-category').value;
     const statusFilter = document.getElementById('filter-status').value;
@@ -788,114 +1317,95 @@
     const subs = await api(`/subscriptions${query}`);
 
     document.getElementById('subscriptions-table').innerHTML = subs.length === 0
-      ? '<div class="empty-state"><div class="icon">$</div><h3>No subscriptions yet</h3><p>Click "Add Subscription" to get started.</p></div>'
+      ? `<div class="empty-state"><div class="empty-icon"><svg><use href="#icon-package"/></svg></div><h3>No subscriptions yet</h3><p>Click "Add Subscription" to start tracking your spending.</p></div>`
       : `<table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Category</th>
-              <th>Cost</th>
-              <th>Cycle</th>
-              <th class="hide-mobile">Renewal</th>
-              <th>Usage</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
+          <thead><tr>
+            <th>Name</th><th>Category</th><th>Cost</th><th>Cycle</th>
+            <th class="hide-mobile">Next Renewal</th><th>Usage</th><th>Status</th><th style="text-align:right">Actions</th>
+          </tr></thead>
           <tbody>
-            ${subs.map(s => `
-              <tr>
-                <td><strong>${esc(s.name)}</strong></td>
-                <td><span class="badge badge-accent">${esc(s.category)}</span></td>
-                <td>$${s.cost.toFixed(2)}</td>
-                <td>${s.billing_cycle}</td>
-                <td class="hide-mobile">${s.renewal_date}</td>
-                <td>${renderStars(s.usage_rating)}</td>
-                <td>${renderStatusBadge(s.status)}</td>
-                <td>
-                  <div style="display:flex;gap:4px;">
-                    <button class="btn btn-sm btn-icon" onclick="logUsage(${s.id})" title="Log usage">+</button>
-                    <button class="btn btn-sm btn-icon" onclick="editSubscription(${s.id})" title="Edit">E</button>
-                    <button class="btn btn-sm btn-icon btn-danger" onclick="deleteSubscription(${s.id}, '${esc(s.name)}')" title="Delete">X</button>
-                  </div>
-                </td>
-              </tr>
-            `).join('')}
+            ${subs.map(s => `<tr>
+              <td><strong>${esc(s.name)}</strong></td>
+              <td><span class="badge badge-accent">${esc(s.category)}</span></td>
+              <td><strong>$${s.cost.toFixed(2)}</strong></td>
+              <td>${s.billing_cycle}</td>
+              <td class="hide-mobile">${s.renewal_date}</td>
+              <td>${renderStars(s.usage_rating)}</td>
+              <td>${renderStatusBadge(s.status)}</td>
+              <td style="text-align:right">
+                <div style="display:flex;gap:6px;justify-content:flex-end;">
+                  <button class="btn btn-sm btn-icon" onclick="logUsage(${s.id})" title="Log usage today"><svg><use href="#icon-plus"/></svg></button>
+                  <button class="btn btn-sm btn-icon" onclick="editSubscription(${s.id})" title="Edit"><svg><use href="#icon-edit"/></svg></button>
+                  <button class="btn btn-sm btn-icon btn-danger" onclick="deleteSubscription(${s.id}, '${esc(s.name)}')" title="Delete"><svg><use href="#icon-trash"/></svg></button>
+                </div>
+              </td>
+            </tr>`).join('')}
           </tbody>
         </table>`;
   }
 
-  // ─── Underused ──────────────────────────────────────────────────────────
+  // ── Underused ─────────────────────────────────────
   async function loadUnderused() {
     const data = await api('/analytics/underused');
 
     document.getElementById('underused-stats').innerHTML = `
       <div class="stat-card red">
-        <div class="label">Flagged Subscriptions</div>
-        <div class="value">${data.flagged_count}</div>
+        <div class="stat-icon"><svg><use href="#icon-alert-triangle"/></svg></div>
+        <div class="stat-label">Flagged Subscriptions</div>
+        <div class="stat-value">${data.flagged_count}</div>
+        <div class="stat-sub">Rarely or never used</div>
       </div>
       <div class="stat-card green">
-        <div class="label">Potential Annual Savings</div>
-        <div class="value">$${data.potential_annual_savings.toFixed(2)}</div>
-        <div class="sub-value">if all flagged subs were cancelled</div>
+        <div class="stat-icon"><svg><use href="#icon-dollar"/></svg></div>
+        <div class="stat-label">Potential Annual Savings</div>
+        <div class="stat-value">$${fmt(data.potential_annual_savings)}</div>
+        <div class="stat-sub">If all flagged subs were cancelled</div>
       </div>
     `;
 
-    document.getElementById('underused-table').innerHTML = data.subscriptions.length === 0
-      ? '<div class="empty-state"><div class="icon">&#10003;</div><h3>All subscriptions are well-used!</h3><p>No underused subscriptions detected.</p></div>'
-      : `<table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Monthly Cost</th>
-              <th>Usage</th>
-              <th>Reason</th>
-              <th>Annual Waste</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${data.subscriptions.map(s => `
-              <tr>
-                <td><strong>${esc(s.name)}</strong></td>
-                <td>$${s.monthly_cost.toFixed(2)}</td>
-                <td>${renderStars(s.usage_rating)}</td>
-                <td style="color:var(--orange);font-size:0.85rem;">${esc(s.reason)}</td>
-                <td style="color:var(--red);font-weight:600;">$${s.potential_annual_savings.toFixed(2)}</td>
-                <td>
-                  <button class="btn btn-sm btn-danger" onclick="cancelSubscription(${s.id})">Cancel</button>
-                </td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>`;
+    document.getElementById('underused-list').innerHTML = data.subscriptions.length === 0
+      ? `<div class="panel"><div class="empty-state"><div class="empty-icon"><svg><use href="#icon-check"/></svg></div><h3>All subscriptions well-used!</h3><p>No underused subscriptions detected.</p></div></div>`
+      : data.subscriptions.map(s => `
+        <div class="underused-card">
+          <div class="renewal-icon critical"><svg><use href="#icon-trending-down"/></svg></div>
+          <div class="underused-info">
+            <div class="underused-name">${esc(s.name)}</div>
+            <div class="underused-reason">${esc(s.reason)}</div>
+            <div class="underused-meta">${esc(s.category)} &middot; ${renderStars(s.usage_rating)}</div>
+          </div>
+          <div class="underused-cost">
+            <div class="underused-monthly">$${s.monthly_cost.toFixed(2)}/mo</div>
+            <div class="underused-annual">$${s.potential_annual_savings.toFixed(2)}/yr wasted</div>
+          </div>
+          <button class="btn btn-sm btn-danger" onclick="cancelSubscription(${s.id})">Cancel</button>
+        </div>
+      `).join('');
   }
 
-  // ─── Alternatives ───────────────────────────────────────────────────────
+  // ── Alternatives ──────────────────────────────────
   async function loadAlternatives() {
     const data = await api('/analytics/alternatives');
 
     document.getElementById('alternatives-list').innerHTML = data.length === 0
-      ? '<div class="empty-state"><h3>No alternatives found</h3><p>Add subscriptions to see cheaper alternatives.</p></div>'
+      ? `<div class="panel"><div class="empty-state"><div class="empty-icon"><svg><use href="#icon-zap"/></svg></div><h3>No alternatives found</h3><p>Add subscriptions to see cheaper alternatives.</p></div></div>`
       : data.map(group => `
         <div class="alt-group">
           <div class="alt-group-header">
-            <span class="name">${esc(group.subscription)}</span>
+            <span class="name"><svg style="width:16px;height:16px;color:var(--accent-light);vertical-align:middle;margin-right:4px"><use href="#icon-arrow-right"/></svg> ${esc(group.subscription)}</span>
             <span class="cost">Currently $${group.current_monthly_cost.toFixed(2)}/mo</span>
           </div>
           ${group.alternatives.map(a => `
             <div class="alt-item">
+              <div class="alt-badge"><svg><use href="#icon-zap"/></svg></div>
               <div class="alt-info">
                 <div class="alt-name">
-                  ${a.url ? `<a href="${esc(a.url)}" target="_blank" rel="noopener" style="color:var(--accent-light);text-decoration:none;">${esc(a.name)}</a>` : esc(a.name)}
+                  ${a.url ? `<a href="${esc(a.url)}" target="_blank" rel="noopener">${esc(a.name)}</a>` : esc(a.name)}
                 </div>
                 <div class="alt-desc">${esc(a.description)}</div>
               </div>
               <div class="alt-savings">
-                <div class="amount">
-                  ${a.monthly_cost === 0 ? 'FREE' : `$${a.monthly_cost.toFixed(2)}/mo`}
-                </div>
-                <div class="period">Save $${a.monthly_savings.toFixed(2)}/mo</div>
+                <div class="alt-price">${a.monthly_cost === 0 ? 'FREE' : `$${a.monthly_cost.toFixed(2)}/mo`}</div>
+                <div class="alt-save-label">Save $${a.monthly_savings.toFixed(2)}/mo</div>
               </div>
             </div>
           `).join('')}
@@ -903,52 +1413,52 @@
       `).join('');
   }
 
-  // ─── Renewals ───────────────────────────────────────────────────────────
+  // ── Renewals ──────────────────────────────────────
   async function loadRenewals() {
     const days = document.getElementById('renewal-days').value;
     const data = await api(`/analytics/renewals?days=${days}`);
 
     document.getElementById('renewals-list').innerHTML = data.renewals.length === 0
-      ? '<div class="empty-state"><h3>No upcoming renewals</h3><p>No subscriptions renewing in this period.</p></div>'
-      : data.renewals.map(r => `
-        <div class="alert-item">
-          <div class="alert-icon ${r.urgency}">
-            ${r.urgency === 'critical' ? '!!' : r.urgency === 'warning' ? '!' : 'i'}
-          </div>
-          <div class="alert-details">
-            <div class="alert-name">${esc(r.name)}</div>
-            <div class="alert-meta">
-              ${r.category} &bull;
-              $${r.cost.toFixed(2)}/${r.billing_cycle} &bull;
-              Renews ${r.next_renewal}
-            </div>
-          </div>
-          <div class="alert-days" style="color: var(--${r.urgency === 'critical' ? 'red' : r.urgency === 'warning' ? 'orange' : 'blue'})">
-            ${r.days_until_renewal === 0 ? 'TODAY!' : r.days_until_renewal === 1 ? 'TOMORROW' : `${r.days_until_renewal} days`}
-          </div>
-        </div>
-      `).join('');
+      ? `<div class="empty-state"><div class="empty-icon"><svg><use href="#icon-calendar"/></svg></div><h3>No upcoming renewals</h3><p>No subscriptions renewing in this period.</p></div>`
+      : data.renewals.map(r => renderRenewalItem(r)).join('');
   }
 
-  // ─── Modal / Form ──────────────────────────────────────────────────────
+  function renderRenewalItem(r) {
+    const daysText = r.days_until_renewal === 0 ? 'TODAY' : r.days_until_renewal === 1 ? 'TOMORROW' : `${r.days_until_renewal}`;
+    const daysLabel = r.days_until_renewal <= 1 ? '' : 'days left';
+    return `
+      <div class="renewal-item">
+        <div class="renewal-icon ${r.urgency}">
+          <svg><use href="#icon-${r.urgency === 'critical' ? 'alert-triangle' : r.urgency === 'warning' ? 'bell' : 'calendar'}"/></svg>
+        </div>
+        <div class="renewal-details">
+          <div class="renewal-name">${esc(r.name)}</div>
+          <div class="renewal-meta">${r.category} &middot; $${r.cost.toFixed(2)}/${r.billing_cycle} &middot; ${r.next_renewal}</div>
+        </div>
+        <div class="renewal-countdown">
+          <div class="renewal-days ${r.urgency}">${daysText}</div>
+          <div class="renewal-label">${daysLabel}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  // ── Modal / Form ──────────────────────────────────
   function openAddModal() {
     document.getElementById('modal-title').textContent = 'Add Subscription';
-    document.getElementById('form-submit-btn').textContent = 'Add Subscription';
+    document.getElementById('form-submit-btn').innerHTML = '<svg><use href="#icon-plus"/></svg> Add Subscription';
     document.getElementById('form-id').value = '';
     document.getElementById('sub-form').reset();
-
-    // Default renewal date to 30 days from now
     const d = new Date();
     d.setDate(d.getDate() + 30);
     document.getElementById('form-renewal').value = d.toISOString().split('T')[0];
-
     document.getElementById('modal-overlay').classList.add('active');
   }
 
   async function editSubscription(id) {
     const sub = await api(`/subscriptions/${id}`);
     document.getElementById('modal-title').textContent = 'Edit Subscription';
-    document.getElementById('form-submit-btn').textContent = 'Save Changes';
+    document.getElementById('form-submit-btn').innerHTML = '<svg><use href="#icon-check"/></svg> Save Changes';
     document.getElementById('form-id').value = sub.id;
     document.getElementById('form-name').value = sub.name;
     document.getElementById('form-category').value = sub.category;
@@ -961,9 +1471,7 @@
     document.getElementById('modal-overlay').classList.add('active');
   }
 
-  function closeModal() {
-    document.getElementById('modal-overlay').classList.remove('active');
-  }
+  function closeModal() { document.getElementById('modal-overlay').classList.remove('active'); }
 
   async function handleFormSubmit(e) {
     e.preventDefault();
@@ -978,7 +1486,6 @@
       status: document.getElementById('form-status').value,
       notes: document.getElementById('form-notes').value,
     };
-
     if (id) {
       await api(`/subscriptions/${id}`, { method: 'PUT', body: JSON.stringify(body) });
       toast('Subscription updated');
@@ -986,25 +1493,34 @@
       await api('/subscriptions', { method: 'POST', body: JSON.stringify(body) });
       toast('Subscription added');
     }
-
     closeModal();
     loadCategories();
     loadTabData(getActiveTab());
   }
 
-  // ─── Actions ────────────────────────────────────────────────────────────
-  async function deleteSubscription(id, name) {
-    if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
-    await api(`/subscriptions/${id}`, { method: 'DELETE' });
-    toast('Subscription deleted');
-    loadTabData(getActiveTab());
+  // ── Confirm delete ────────────────────────────────
+  let pendingDeleteId = null;
+
+  function deleteSubscription(id, name) {
+    pendingDeleteId = id;
+    document.getElementById('confirm-text').textContent = `"${name}" will be permanently removed.`;
+    document.getElementById('confirm-overlay').classList.add('active');
   }
 
+  document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
+    if (pendingDeleteId) {
+      await api(`/subscriptions/${pendingDeleteId}`, { method: 'DELETE' });
+      toast('Subscription deleted');
+      pendingDeleteId = null;
+      closeConfirm();
+      loadTabData(getActiveTab());
+    }
+  });
+
+  function closeConfirm() { document.getElementById('confirm-overlay').classList.remove('active'); }
+
   async function cancelSubscription(id) {
-    await api(`/subscriptions/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify({ status: 'cancelled' }),
-    });
+    await api(`/subscriptions/${id}`, { method: 'PUT', body: JSON.stringify({ status: 'cancelled' }) });
     toast('Subscription cancelled');
     loadTabData(getActiveTab());
   }
@@ -1014,31 +1530,31 @@
     toast('Usage logged for today');
   }
 
-  // ─── Helpers ────────────────────────────────────────────────────────────
+  // ── Helpers ───────────────────────────────────────
   function renderStars(rating) {
-    return Array.from({ length: 5 }, (_, i) =>
-      `<span style="color:${i < rating ? 'var(--orange)' : 'var(--border)'}">&#9733;</span>`
-    ).join('');
+    return `<span class="stars">${Array.from({ length: 5 }, (_, i) =>
+      `<svg class="${i < rating ? 'filled' : ''}"><use href="#icon-star"/></svg>`
+    ).join('')}</span>`;
   }
 
   function renderStatusBadge(status) {
-    const map = {
-      active: 'badge-green',
-      paused: 'badge-orange',
-      cancelled: 'badge-red',
-    };
-    return `<span class="badge ${map[status] || 'badge-blue'}">${status}</span>`;
+    const map = { active: 'badge-green', paused: 'badge-amber', cancelled: 'badge-red' };
+    const icons = { active: '#icon-check', paused: '#icon-bell', cancelled: '#icon-x' };
+    return `<span class="badge ${map[status] || 'badge-blue'}"><svg><use href="${icons[status] || '#icon-check'}"/></svg>${status}</span>`;
   }
 
   function esc(str) {
+    if (!str) return '';
     const div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
   }
 
-  function getActiveTab() {
-    return document.querySelector('.nav-tab.active').dataset.tab;
+  function fmt(n) {
+    return n >= 1000 ? n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) : n.toFixed(2);
   }
+
+  function getActiveTab() { return document.querySelector('.nav-tab.active').dataset.tab; }
 
   async function loadCategories() {
     const cats = await api('/categories');
@@ -1049,17 +1565,12 @@
     select.value = current;
   }
 
-  // Close modal on overlay click
-  document.getElementById('modal-overlay').addEventListener('click', (e) => {
-    if (e.target === e.currentTarget) closeModal();
-  });
+  // Close modals
+  document.getElementById('modal-overlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+  document.getElementById('confirm-overlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeConfirm(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeConfirm(); } });
 
-  // Close modal on Escape
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeModal();
-  });
-
-  // ─── Init ───────────────────────────────────────────────────────────────
+  // Init
   (async function init() {
     await loadCategories();
     loadDashboard();
