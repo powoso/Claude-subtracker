@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SubTracker — Subscription Tracker &amp; Optimizer</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #242836;
+      --border: #2e3346;
+      --text: #e4e6f0;
+      --text-dim: #8b8fa3;
+      --accent: #6c5ce7;
+      --accent-light: #a29bfe;
+      --green: #00b894;
+      --green-bg: rgba(0,184,148,0.12);
+      --red: #ff6b6b;
+      --red-bg: rgba(255,107,107,0.12);
+      --orange: #fdcb6e;
+      --orange-bg: rgba(253,203,110,0.12);
+      --blue: #74b9ff;
+      --blue-bg: rgba(116,185,255,0.12);
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .app-header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .app-header h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .app-header h1 .logo {
+      width: 32px;
+      height: 32px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* Navigation Tabs */
+    .nav-tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 4px;
+      margin-bottom: 24px;
+      border: 1px solid var(--border);
+    }
+
+    .nav-tab {
+      padding: 10px 20px;
+      border: none;
+      background: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      flex: 1;
+      text-align: center;
+    }
+
+    .nav-tab:hover { color: var(--text); background: var(--surface2); }
+    .nav-tab.active { color: white; background: var(--accent); }
+
+    /* Stat Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+
+    .stat-card .label {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+
+    .stat-card .value {
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    .stat-card .sub-value {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    .stat-card.green .value { color: var(--green); }
+    .stat-card.red .value { color: var(--red); }
+    .stat-card.orange .value { color: var(--orange); }
+    .stat-card.blue .value { color: var(--blue); }
+    .stat-card.accent .value { color: var(--accent-light); }
+
+    /* Buttons */
+    .btn {
+      padding: 10px 20px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface2);
+      color: var(--text);
+    }
+
+    .btn:hover { border-color: var(--accent); }
+    .btn-primary { background: var(--accent); color: white; border-color: var(--accent); }
+    .btn-primary:hover { background: #5b4bd6; }
+    .btn-danger { color: var(--red); }
+    .btn-danger:hover { background: var(--red-bg); border-color: var(--red); }
+    .btn-sm { padding: 6px 12px; font-size: 0.8rem; }
+    .btn-icon { padding: 8px; min-width: 36px; justify-content: center; }
+
+    /* Tables */
+    .table-wrapper {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      text-align: left;
+      padding: 12px 16px;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface2);
+    }
+
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(108, 92, 231, 0.04); }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .badge-green { background: var(--green-bg); color: var(--green); }
+    .badge-red { background: var(--red-bg); color: var(--red); }
+    .badge-orange { background: var(--orange-bg); color: var(--orange); }
+    .badge-blue { background: var(--blue-bg); color: var(--blue); }
+    .badge-accent { background: rgba(108,92,231,0.15); color: var(--accent-light); }
+
+    /* Usage Stars */
+    .usage-stars {
+      display: flex;
+      gap: 2px;
+    }
+
+    .usage-stars .star {
+      width: 16px;
+      height: 16px;
+      color: var(--border);
+    }
+
+    .usage-stars .star.filled { color: var(--orange); }
+
+    /* Category Bars */
+    .category-bar-wrapper {
+      margin-bottom: 12px;
+    }
+
+    .category-bar-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+      font-size: 0.85rem;
+    }
+
+    .category-bar {
+      height: 8px;
+      background: var(--surface2);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .category-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.6s ease;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      width: 90%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: translateY(20px);
+      transition: transform 0.2s;
+    }
+
+    .modal-overlay.active .modal { transform: translateY(0); }
+
+    .modal h2 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .form-group textarea { resize: vertical; min-height: 60px; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 24px;
+    }
+
+    /* Alerts Panel */
+    .alert-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .alert-item:last-child { border-bottom: none; }
+
+    .alert-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .alert-icon.critical { background: var(--red-bg); }
+    .alert-icon.warning { background: var(--orange-bg); }
+    .alert-icon.normal { background: var(--blue-bg); }
+
+    .alert-details { flex: 1; }
+    .alert-details .alert-name { font-weight: 600; font-size: 0.95rem; }
+    .alert-details .alert-meta { font-size: 0.8rem; color: var(--text-dim); }
+    .alert-days { font-weight: 700; font-size: 0.95rem; text-align: right; white-space: nowrap; }
+
+    /* Alternatives */
+    .alt-group {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .alt-group-header {
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .alt-group-header .name { font-weight: 600; }
+    .alt-group-header .cost { color: var(--text-dim); font-size: 0.9rem; }
+
+    .alt-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .alt-item:last-child { border-bottom: none; }
+
+    .alt-info { flex: 1; }
+    .alt-info .alt-name { font-weight: 500; }
+    .alt-info .alt-desc { font-size: 0.8rem; color: var(--text-dim); margin-top: 2px; }
+    .alt-savings { text-align: right; }
+    .alt-savings .amount { font-weight: 700; color: var(--green); }
+    .alt-savings .period { font-size: 0.75rem; color: var(--text-dim); }
+
+    /* Section headers */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .section-header h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-dim);
+    }
+
+    .empty-state .icon { font-size: 48px; margin-bottom: 16px; opacity: 0.5; }
+    .empty-state h3 { font-size: 1.1rem; color: var(--text); margin-bottom: 8px; }
+
+    /* Tab panels */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container { padding: 16px; }
+      .app-header { padding: 12px 16px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .form-row { grid-template-columns: 1fr; }
+      .nav-tabs { flex-wrap: wrap; }
+      .nav-tab { padding: 8px 12px; font-size: 0.8rem; }
+      td, th { padding: 10px 8px; font-size: 0.8rem; }
+      .hide-mobile { display: none; }
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in { animation: fadeIn 0.3s ease; }
+
+    /* Toast notifications */
+    .toast-container {
+      position: fixed;
+      top: 80px;
+      right: 24px;
+      z-index: 300;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .toast {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 20px;
+      font-size: 0.9rem;
+      animation: slideIn 0.3s ease;
+      min-width: 250px;
+    }
+
+    .toast.success { border-left: 3px solid var(--green); }
+    .toast.error { border-left: 3px solid var(--red); }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+  </style>
+</head>
+<body>
+
+<header class="app-header">
+  <h1>
+    <span class="logo">$</span>
+    SubTracker
+  </h1>
+  <div class="header-actions">
+    <button class="btn btn-primary" onclick="openAddModal()">+ Add Subscription</button>
+  </div>
+</header>
+
+<div class="container">
+  <!-- Navigation -->
+  <div class="nav-tabs">
+    <button class="nav-tab active" data-tab="dashboard">Dashboard</button>
+    <button class="nav-tab" data-tab="subscriptions">Subscriptions</button>
+    <button class="nav-tab" data-tab="underused">Underused</button>
+    <button class="nav-tab" data-tab="alternatives">Alternatives</button>
+    <button class="nav-tab" data-tab="renewals">Renewals</button>
+  </div>
+
+  <!-- Dashboard Tab -->
+  <div id="tab-dashboard" class="tab-panel active">
+    <div class="stats-grid" id="stats-grid"></div>
+
+    <div class="section-header">
+      <h2>Spending by Category</h2>
+    </div>
+    <div class="table-wrapper" style="padding: 20px; margin-bottom: 24px;" id="category-breakdown"></div>
+
+    <div class="section-header">
+      <h2>Upcoming Renewals (7 Days)</h2>
+    </div>
+    <div class="table-wrapper" id="dashboard-renewals"></div>
+  </div>
+
+  <!-- Subscriptions Tab -->
+  <div id="tab-subscriptions" class="tab-panel">
+    <div class="section-header">
+      <h2>All Subscriptions</h2>
+      <div style="display:flex;gap:8px;">
+        <select id="filter-category" class="btn" onchange="loadSubscriptions()">
+          <option value="">All Categories</option>
+        </select>
+        <select id="filter-status" class="btn" onchange="loadSubscriptions()">
+          <option value="">All Status</option>
+          <option value="active">Active</option>
+          <option value="paused">Paused</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </div>
+    </div>
+    <div class="table-wrapper" id="subscriptions-table"></div>
+  </div>
+
+  <!-- Underused Tab -->
+  <div id="tab-underused" class="tab-panel">
+    <div id="underused-stats" class="stats-grid" style="margin-bottom:24px;"></div>
+    <div class="section-header">
+      <h2>Flagged Subscriptions</h2>
+    </div>
+    <div class="table-wrapper" id="underused-table"></div>
+  </div>
+
+  <!-- Alternatives Tab -->
+  <div id="tab-alternatives" class="tab-panel">
+    <div class="section-header">
+      <h2>Cheaper Alternatives</h2>
+    </div>
+    <p style="color:var(--text-dim);margin-bottom:20px;font-size:0.9rem;">
+      Free and lower-cost alternatives to your current subscriptions. Switch to save money.
+    </p>
+    <div id="alternatives-list"></div>
+  </div>
+
+  <!-- Renewals Tab -->
+  <div id="tab-renewals" class="tab-panel">
+    <div class="section-header">
+      <h2>Upcoming Renewals</h2>
+      <select id="renewal-days" class="btn" onchange="loadRenewals()">
+        <option value="7">Next 7 days</option>
+        <option value="14">Next 14 days</option>
+        <option value="30" selected>Next 30 days</option>
+        <option value="60">Next 60 days</option>
+        <option value="90">Next 90 days</option>
+      </select>
+    </div>
+    <div class="table-wrapper" id="renewals-list"></div>
+  </div>
+</div>
+
+<!-- Add/Edit Modal -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <h2 id="modal-title">Add Subscription</h2>
+    <form id="sub-form" onsubmit="handleFormSubmit(event)">
+      <input type="hidden" id="form-id">
+      <div class="form-group">
+        <label>Subscription Name</label>
+        <input type="text" id="form-name" placeholder="e.g. Netflix, Spotify, Gym..." required>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Category</label>
+          <select id="form-category">
+            <option value="Streaming">Streaming</option>
+            <option value="Music">Music</option>
+            <option value="Gaming">Gaming</option>
+            <option value="Fitness">Fitness</option>
+            <option value="Productivity">Productivity</option>
+            <option value="Cloud Storage">Cloud Storage</option>
+            <option value="Security">Security</option>
+            <option value="Developer Tools">Developer Tools</option>
+            <option value="Design">Design</option>
+            <option value="Communication">Communication</option>
+            <option value="News">News</option>
+            <option value="Education">Education</option>
+            <option value="Food & Delivery">Food & Delivery</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Finance">Finance</option>
+            <option value="Health">Health</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="form-status">
+            <option value="active">Active</option>
+            <option value="paused">Paused</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Cost ($)</label>
+          <input type="number" id="form-cost" step="0.01" min="0" placeholder="9.99" required>
+        </div>
+        <div class="form-group">
+          <label>Billing Cycle</label>
+          <select id="form-billing">
+            <option value="monthly">Monthly</option>
+            <option value="annual">Annual</option>
+            <option value="weekly">Weekly</option>
+            <option value="quarterly">Quarterly</option>
+            <option value="semi-annual">Semi-Annual</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Next Renewal Date</label>
+          <input type="date" id="form-renewal" required>
+        </div>
+        <div class="form-group">
+          <label>Usage Rating (1-5)</label>
+          <select id="form-usage">
+            <option value="1">1 - Never use</option>
+            <option value="2">2 - Rarely</option>
+            <option value="3" selected>3 - Sometimes</option>
+            <option value="4">4 - Often</option>
+            <option value="5">5 - Daily</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Notes</label>
+        <textarea id="form-notes" placeholder="Any notes about this subscription..."></textarea>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn" onclick="closeModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="form-submit-btn">Add Subscription</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+  // ─── API Helpers ─────────────────────────────────────────────────────────
+  const API = '/api';
+
+  async function api(path, options = {}) {
+    const res = await fetch(API + path, {
+      headers: { 'Content-Type': 'application/json' },
+      ...options,
+    });
+    return res.json();
+  }
+
+  function toast(message, type = 'success') {
+    const container = document.getElementById('toast-container');
+    const el = document.createElement('div');
+    el.className = `toast ${type}`;
+    el.textContent = message;
+    container.appendChild(el);
+    setTimeout(() => el.remove(), 3000);
+  }
+
+  // ─── Tab Navigation ─────────────────────────────────────────────────────
+  document.querySelectorAll('.nav-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+      loadTabData(tab.dataset.tab);
+    });
+  });
+
+  function loadTabData(tab) {
+    switch (tab) {
+      case 'dashboard': loadDashboard(); break;
+      case 'subscriptions': loadSubscriptions(); break;
+      case 'underused': loadUnderused(); break;
+      case 'alternatives': loadAlternatives(); break;
+      case 'renewals': loadRenewals(); break;
+    }
+  }
+
+  // ─── Dashboard ──────────────────────────────────────────────────────────
+  async function loadDashboard() {
+    const [summary, renewals] = await Promise.all([
+      api('/analytics/summary'),
+      api('/analytics/renewals?days=7'),
+    ]);
+
+    document.getElementById('stats-grid').innerHTML = `
+      <div class="stat-card accent">
+        <div class="label">Active Subscriptions</div>
+        <div class="value">${summary.active_count}</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="label">Monthly Spend</div>
+        <div class="value">$${summary.total_monthly.toFixed(2)}</div>
+        <div class="sub-value">$${summary.total_daily.toFixed(2)}/day</div>
+      </div>
+      <div class="stat-card green">
+        <div class="label">Annual Spend</div>
+        <div class="value">$${summary.total_annual.toFixed(2)}</div>
+      </div>
+      <div class="stat-card orange">
+        <div class="label">Renewals This Week</div>
+        <div class="value">${renewals.upcoming_count}</div>
+      </div>
+    `;
+
+    // Category breakdown
+    const maxCat = Math.max(...summary.category_breakdown.map(c => c.monthly_cost), 1);
+    const colors = ['#6c5ce7','#00b894','#74b9ff','#fdcb6e','#ff6b6b','#fd79a8','#a29bfe','#55efc4'];
+    document.getElementById('category-breakdown').innerHTML = summary.category_breakdown.length === 0
+      ? '<p style="color:var(--text-dim)">No active subscriptions yet.</p>'
+      : summary.category_breakdown.map((c, i) => `
+        <div class="category-bar-wrapper">
+          <div class="category-bar-header">
+            <span>${c.category} (${c.count})</span>
+            <span>$${c.monthly_cost.toFixed(2)}/mo</span>
+          </div>
+          <div class="category-bar">
+            <div class="category-bar-fill" style="width:${(c.monthly_cost / maxCat * 100)}%;background:${colors[i % colors.length]}"></div>
+          </div>
+        </div>
+      `).join('');
+
+    // Upcoming renewals widget
+    document.getElementById('dashboard-renewals').innerHTML = renewals.renewals.length === 0
+      ? '<div class="empty-state"><p>No renewals in the next 7 days</p></div>'
+      : renewals.renewals.map(r => `
+        <div class="alert-item">
+          <div class="alert-icon ${r.urgency}">
+            ${r.urgency === 'critical' ? '!!' : r.urgency === 'warning' ? '!' : 'i'}
+          </div>
+          <div class="alert-details">
+            <div class="alert-name">${esc(r.name)}</div>
+            <div class="alert-meta">${r.category} &bull; $${r.monthly_cost.toFixed(2)}/mo &bull; ${r.next_renewal}</div>
+          </div>
+          <div class="alert-days" style="color: var(--${r.urgency === 'critical' ? 'red' : r.urgency === 'warning' ? 'orange' : 'blue'})">
+            ${r.days_until_renewal === 0 ? 'Today' : r.days_until_renewal === 1 ? 'Tomorrow' : `${r.days_until_renewal} days`}
+          </div>
+        </div>
+      `).join('');
+  }
+
+  // ─── Subscriptions List ─────────────────────────────────────────────────
+  async function loadSubscriptions() {
+    const categoryFilter = document.getElementById('filter-category').value;
+    const statusFilter = document.getElementById('filter-status').value;
+    let query = '?sort=name';
+    if (categoryFilter) query += `&category=${encodeURIComponent(categoryFilter)}`;
+    if (statusFilter) query += `&status=${statusFilter}`;
+
+    const subs = await api(`/subscriptions${query}`);
+
+    document.getElementById('subscriptions-table').innerHTML = subs.length === 0
+      ? '<div class="empty-state"><div class="icon">$</div><h3>No subscriptions yet</h3><p>Click "Add Subscription" to get started.</p></div>'
+      : `<table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Cost</th>
+              <th>Cycle</th>
+              <th class="hide-mobile">Renewal</th>
+              <th>Usage</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${subs.map(s => `
+              <tr>
+                <td><strong>${esc(s.name)}</strong></td>
+                <td><span class="badge badge-accent">${esc(s.category)}</span></td>
+                <td>$${s.cost.toFixed(2)}</td>
+                <td>${s.billing_cycle}</td>
+                <td class="hide-mobile">${s.renewal_date}</td>
+                <td>${renderStars(s.usage_rating)}</td>
+                <td>${renderStatusBadge(s.status)}</td>
+                <td>
+                  <div style="display:flex;gap:4px;">
+                    <button class="btn btn-sm btn-icon" onclick="logUsage(${s.id})" title="Log usage">+</button>
+                    <button class="btn btn-sm btn-icon" onclick="editSubscription(${s.id})" title="Edit">E</button>
+                    <button class="btn btn-sm btn-icon btn-danger" onclick="deleteSubscription(${s.id}, '${esc(s.name)}')" title="Delete">X</button>
+                  </div>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>`;
+  }
+
+  // ─── Underused ──────────────────────────────────────────────────────────
+  async function loadUnderused() {
+    const data = await api('/analytics/underused');
+
+    document.getElementById('underused-stats').innerHTML = `
+      <div class="stat-card red">
+        <div class="label">Flagged Subscriptions</div>
+        <div class="value">${data.flagged_count}</div>
+      </div>
+      <div class="stat-card green">
+        <div class="label">Potential Annual Savings</div>
+        <div class="value">$${data.potential_annual_savings.toFixed(2)}</div>
+        <div class="sub-value">if all flagged subs were cancelled</div>
+      </div>
+    `;
+
+    document.getElementById('underused-table').innerHTML = data.subscriptions.length === 0
+      ? '<div class="empty-state"><div class="icon">&#10003;</div><h3>All subscriptions are well-used!</h3><p>No underused subscriptions detected.</p></div>'
+      : `<table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Monthly Cost</th>
+              <th>Usage</th>
+              <th>Reason</th>
+              <th>Annual Waste</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${data.subscriptions.map(s => `
+              <tr>
+                <td><strong>${esc(s.name)}</strong></td>
+                <td>$${s.monthly_cost.toFixed(2)}</td>
+                <td>${renderStars(s.usage_rating)}</td>
+                <td style="color:var(--orange);font-size:0.85rem;">${esc(s.reason)}</td>
+                <td style="color:var(--red);font-weight:600;">$${s.potential_annual_savings.toFixed(2)}</td>
+                <td>
+                  <button class="btn btn-sm btn-danger" onclick="cancelSubscription(${s.id})">Cancel</button>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>`;
+  }
+
+  // ─── Alternatives ───────────────────────────────────────────────────────
+  async function loadAlternatives() {
+    const data = await api('/analytics/alternatives');
+
+    document.getElementById('alternatives-list').innerHTML = data.length === 0
+      ? '<div class="empty-state"><h3>No alternatives found</h3><p>Add subscriptions to see cheaper alternatives.</p></div>'
+      : data.map(group => `
+        <div class="alt-group">
+          <div class="alt-group-header">
+            <span class="name">${esc(group.subscription)}</span>
+            <span class="cost">Currently $${group.current_monthly_cost.toFixed(2)}/mo</span>
+          </div>
+          ${group.alternatives.map(a => `
+            <div class="alt-item">
+              <div class="alt-info">
+                <div class="alt-name">
+                  ${a.url ? `<a href="${esc(a.url)}" target="_blank" rel="noopener" style="color:var(--accent-light);text-decoration:none;">${esc(a.name)}</a>` : esc(a.name)}
+                </div>
+                <div class="alt-desc">${esc(a.description)}</div>
+              </div>
+              <div class="alt-savings">
+                <div class="amount">
+                  ${a.monthly_cost === 0 ? 'FREE' : `$${a.monthly_cost.toFixed(2)}/mo`}
+                </div>
+                <div class="period">Save $${a.monthly_savings.toFixed(2)}/mo</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `).join('');
+  }
+
+  // ─── Renewals ───────────────────────────────────────────────────────────
+  async function loadRenewals() {
+    const days = document.getElementById('renewal-days').value;
+    const data = await api(`/analytics/renewals?days=${days}`);
+
+    document.getElementById('renewals-list').innerHTML = data.renewals.length === 0
+      ? '<div class="empty-state"><h3>No upcoming renewals</h3><p>No subscriptions renewing in this period.</p></div>'
+      : data.renewals.map(r => `
+        <div class="alert-item">
+          <div class="alert-icon ${r.urgency}">
+            ${r.urgency === 'critical' ? '!!' : r.urgency === 'warning' ? '!' : 'i'}
+          </div>
+          <div class="alert-details">
+            <div class="alert-name">${esc(r.name)}</div>
+            <div class="alert-meta">
+              ${r.category} &bull;
+              $${r.cost.toFixed(2)}/${r.billing_cycle} &bull;
+              Renews ${r.next_renewal}
+            </div>
+          </div>
+          <div class="alert-days" style="color: var(--${r.urgency === 'critical' ? 'red' : r.urgency === 'warning' ? 'orange' : 'blue'})">
+            ${r.days_until_renewal === 0 ? 'TODAY!' : r.days_until_renewal === 1 ? 'TOMORROW' : `${r.days_until_renewal} days`}
+          </div>
+        </div>
+      `).join('');
+  }
+
+  // ─── Modal / Form ──────────────────────────────────────────────────────
+  function openAddModal() {
+    document.getElementById('modal-title').textContent = 'Add Subscription';
+    document.getElementById('form-submit-btn').textContent = 'Add Subscription';
+    document.getElementById('form-id').value = '';
+    document.getElementById('sub-form').reset();
+
+    // Default renewal date to 30 days from now
+    const d = new Date();
+    d.setDate(d.getDate() + 30);
+    document.getElementById('form-renewal').value = d.toISOString().split('T')[0];
+
+    document.getElementById('modal-overlay').classList.add('active');
+  }
+
+  async function editSubscription(id) {
+    const sub = await api(`/subscriptions/${id}`);
+    document.getElementById('modal-title').textContent = 'Edit Subscription';
+    document.getElementById('form-submit-btn').textContent = 'Save Changes';
+    document.getElementById('form-id').value = sub.id;
+    document.getElementById('form-name').value = sub.name;
+    document.getElementById('form-category').value = sub.category;
+    document.getElementById('form-cost').value = sub.cost;
+    document.getElementById('form-billing').value = sub.billing_cycle;
+    document.getElementById('form-renewal').value = sub.renewal_date;
+    document.getElementById('form-usage').value = sub.usage_rating;
+    document.getElementById('form-status').value = sub.status;
+    document.getElementById('form-notes').value = sub.notes || '';
+    document.getElementById('modal-overlay').classList.add('active');
+  }
+
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('active');
+  }
+
+  async function handleFormSubmit(e) {
+    e.preventDefault();
+    const id = document.getElementById('form-id').value;
+    const body = {
+      name: document.getElementById('form-name').value,
+      category: document.getElementById('form-category').value,
+      cost: parseFloat(document.getElementById('form-cost').value),
+      billing_cycle: document.getElementById('form-billing').value,
+      renewal_date: document.getElementById('form-renewal').value,
+      usage_rating: parseInt(document.getElementById('form-usage').value),
+      status: document.getElementById('form-status').value,
+      notes: document.getElementById('form-notes').value,
+    };
+
+    if (id) {
+      await api(`/subscriptions/${id}`, { method: 'PUT', body: JSON.stringify(body) });
+      toast('Subscription updated');
+    } else {
+      await api('/subscriptions', { method: 'POST', body: JSON.stringify(body) });
+      toast('Subscription added');
+    }
+
+    closeModal();
+    loadCategories();
+    loadTabData(getActiveTab());
+  }
+
+  // ─── Actions ────────────────────────────────────────────────────────────
+  async function deleteSubscription(id, name) {
+    if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+    await api(`/subscriptions/${id}`, { method: 'DELETE' });
+    toast('Subscription deleted');
+    loadTabData(getActiveTab());
+  }
+
+  async function cancelSubscription(id) {
+    await api(`/subscriptions/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ status: 'cancelled' }),
+    });
+    toast('Subscription cancelled');
+    loadTabData(getActiveTab());
+  }
+
+  async function logUsage(id) {
+    await api(`/subscriptions/${id}/usage`, { method: 'POST' });
+    toast('Usage logged for today');
+  }
+
+  // ─── Helpers ────────────────────────────────────────────────────────────
+  function renderStars(rating) {
+    return Array.from({ length: 5 }, (_, i) =>
+      `<span style="color:${i < rating ? 'var(--orange)' : 'var(--border)'}">&#9733;</span>`
+    ).join('');
+  }
+
+  function renderStatusBadge(status) {
+    const map = {
+      active: 'badge-green',
+      paused: 'badge-orange',
+      cancelled: 'badge-red',
+    };
+    return `<span class="badge ${map[status] || 'badge-blue'}">${status}</span>`;
+  }
+
+  function esc(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function getActiveTab() {
+    return document.querySelector('.nav-tab.active').dataset.tab;
+  }
+
+  async function loadCategories() {
+    const cats = await api('/categories');
+    const select = document.getElementById('filter-category');
+    const current = select.value;
+    select.innerHTML = '<option value="">All Categories</option>' +
+      cats.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
+    select.value = current;
+  }
+
+  // Close modal on overlay click
+  document.getElementById('modal-overlay').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeModal();
+  });
+
+  // Close modal on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  // ─── Init ───────────────────────────────────────────────────────────────
+  (async function init() {
+    await loadCategories();
+    loadDashboard();
+  })();
+</script>
+</body>
+</html>
